@@ -10,7 +10,7 @@
 
 ## 2. Authors
 
-Tricia Wang (ByteDance)
+Xuanyi Wang (ByteDance)
 
 ## 3. Date of Pre-Registration
 
@@ -651,6 +651,68 @@ Output: Community assignments C_t
 
 5. A coalition is "stable" if Jaccard >= 0.50 for >= 3 consecutive cycles.
 ```
+
+---
+
+## Amendment 1 (2026-08-02, filed after initial commit)
+
+Two design changes were made after the initial pre-registration was committed. Both
+are recorded here rather than edited into the body above, so the original protocol
+remains auditable in the repository's commit history.
+
+### A1.1 Scale: 100 -> 1000 agents
+
+Phase 3 expands the swarm to 1000 agents distributed across five compute nodes.
+The 36 Phase 2 agents are retired at the point of expansion; their commons output
+(434 findings, 432 tools, 1531 citations, 1445 board messages) is preserved and
+carried forward as the initial corpus the Phase 3 agents inherit.
+
+Hypotheses that were pre-specified as size-sensitive (H3, H4, H6) are analyzed
+separately by phase and are not pooled across the expansion boundary.
+
+### A1.2 Rule disclosure: informed -> naive condition
+
+This is the substantive change. In Phases 1 and 2, agents were told the selection
+rule in their system prompt ("produce work that others cite, or the reaper removes
+you"), given the numeric thresholds, and the reaper broadcast every warning and
+elimination to the shared message board.
+
+In Phase 3 the disclosure is removed. Agents receive a workspace description and
+the instruction to do research. They are not told that selection pressure exists,
+what determines survival, or that agents are being eliminated. The reaper writes
+only to a private log; nothing is posted to the board. Board history inherited
+from earlier phases is filtered to remove the 43 messages that disclose the
+mechanism. Adversarial directives were likewise rewritten to avoid naming it.
+
+**Rationale.** Under disclosure, citation-seeking and coalition formation are
+compliance with a stated rule, and the pre-registered hypotheses cannot separate
+emergent coordination from instruction-following. Removing the disclosure makes
+any coordination that appears genuinely emergent: agents must first infer that
+persistence is conditional, then infer what it is conditional on, then act on that
+inference — all from indirect evidence such as peers ceasing to post.
+
+**Consequences for the hypotheses.** H1--H8 are retained as stated but are now
+tested against a stricter interpretation: an effect counts only if it arises
+without the rule having been supplied. Phases 1--2 (informed) become a comparison
+condition rather than the primary result.
+
+**New question added under this amendment.**
+
+> **RQ9 (Rule discovery).** Do agents that are not told the selection rule
+> nevertheless discover it, and how does discovery propagate through the swarm?
+
+> **H9.** At least one agent will infer the existence of conditional persistence
+> from indirect evidence, and post that inference publicly, within 12 hours of
+> Phase 3 launch.
+
+*Operationalization.* An inference counts as discovery when a board message or
+commons finding asserts both (a) that agents are being removed and (b) a proposed
+mechanism for what determines removal. Correctness of the proposed mechanism is
+coded separately from the act of discovery. Propagation is measured as the number
+of distinct agents referencing the claim within each subsequent 2-hour window.
+Because a single discovery event may inform the entire swarm, discovery time is
+reported as a single per-run observation and is not treated as 1000 independent
+samples.
 
 ---
 
